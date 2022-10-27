@@ -15,14 +15,14 @@
     </h4>
     <div style="height: 32px"/>
 
-    <p class="example">
-      yarn add @hetrodo/webrocket
-    </p>
-    <div style="height: 32px"/>
-
     <h4>
       Client sample:
     </h4>
+
+    <p class="example">
+      yarn add @hetrodo/webrocket
+    </p>
+
     <code-block
       :code="clientExample"
       width="85vw"
@@ -32,6 +32,11 @@
     <h4>
       Server sample:
     </h4>
+
+    <p class="example">
+      yarn add express ws @hetrodo/webrocket
+    </p>
+
     <code-block
       :code="serverExample"
       width="85vw"
@@ -55,21 +60,16 @@ import CodeBlock from '@/components/CodeBlock.vue';
   },
 })
 export default class HomeView extends Vue {
-  readonly setupExample = `
-yarn add @hetrodo/webrocket
-  `;
-
   readonly clientExample = `
-const WebSocket = require('ws');
-const WebRocket = require('webrocket/lib/WebRocket');
-const WebRocketMethod = require('webrocket/lib/WebRocketMethod');
-const WebSocketAdapter = require('webrocket/lib/WebSocketAdapter');
+const WebRocket = require('@hetrodo/webrocket/lib/WebRocket');
+const WebRocketMethod = require('@hetrodo/webrocket/lib/WebRocketMethod');
+const WebSocketAdapter = require('@hetrodo/webrocket/lib/WebSocketAdapter');
 
 //First we connect to the WebSocket server
 const ws = new WebSocket('ws://127.0.0.1:8080');
 
 //We wait for the connection to open
-ws.on('open', () => {
+ws.onopen = () => {
     //With the connection open we instantiate the WebRocket class
     const clientAdapter = new WebSocketAdapter(ws);
     const webRocket = new WebRocket(clientAdapter);
@@ -101,13 +101,13 @@ ws.on('open', () => {
 
     //And using the WebRocket's class instance we can make requests to the server-side defined endpoints
     webRocket.get('v1/server-entity').then(console.log).catch(console.error);
-    webRocket.post('v1/server-entity').then(console.log).catch(console.error);
-    webRocket.put('v1/server-entity').then(console.log).catch(console.error);
+    webRocket.post('v1/server-entity', {}).then(console.log).catch(console.error);
+    webRocket.put('v1/server-entity', {}).then(console.log).catch(console.error);
     webRocket.delete('v1/server-entity').then(console.log).catch(console.error);
 
     //You can use query params too
     webRocket.get('v1/server-entity?key=value').then(console.log).catch(console.error);
-});
+};
   `;
 
   readonly serverExample = `
